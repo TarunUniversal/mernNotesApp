@@ -7,24 +7,9 @@ const PORT = process.env.PORT || 5000;
 const userRoutes = require('./routes/user');
 const noteRoutes = require('./routes/note');
 const { notFound, errorHandler } = require('./middlewares/error');
-
-// const sgMail = require('@sendgrid/mail')
-// sgMail.setApiKey(process.env.SEND_GRID)
-
-// const msg = {
-//     to: 'rathoretarun14@gmail.com',
-//     from: 'tarunrathore170899@gmail.com',
-//     subject: 'testing emailing',
-//     text: 'This is testing phase',
-//     html: '<h1>This is testing phase</h1>'
-// }
-
+const path = require('path');
 connectDB();
 app.use(express.json());
-
-// app.get('/', (req,res) => {
-//     res.send('Hello World!');
-// })
 
 // app.get('/api/notes', (req,res) => {
 //     res.send(notes)
@@ -38,17 +23,21 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/notes', noteRoutes);
 
-// app.route('/api/email')
-//    .get(function () {
-//     sgMail
-//     .send(msg)
-//     .then(() => {
-//         console.log('Email sent');
-//     })
-//     .catch((error) => {
-//         console.log(error);
-//     })
-//    })
+// ---------- deployment -----------
+
+__dirname = path.resolve();
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static(path.join(__dirname,'client/build')));
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    })
+} else{
+    app.get('/', (req,res) => {
+        res.send('Hello World!');
+    })
+}
+
+// ---------- deployment -----------
 
 app.use(notFound);
 app.use(errorHandler);
