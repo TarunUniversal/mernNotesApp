@@ -1,0 +1,23 @@
+.link{
+    text-decoration-line: none;
+}
+
+.searchBtn {
+    background-color: transparent;
+    box-shadow: none;
+}
+.searchBtn:hover {
+    background-color: transparent;
+    box-shadow: none;
+    color: black;
+}
+
+.avatar{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+.avatar:hover {
+    border: solid;
+    border-color: #485785;
+}
