@@ -68,6 +68,7 @@ const ProfileUpdate = () => {
         <>
             <h1 className='heading' >Update Profile</h1>
             {error && <ErrorMessage variant="danger" >{error}</ErrorMessage>}
+            {picMessage && <ErrorMessage variant="danger" >{picMessage}</ErrorMessage>}
             {success && <ErrorMessage variant="success" >Successfully Updated</ErrorMessage>}
             {loading && <Loading/>}
             <div style={{display:'flex', justifyContent:'space-evenly', flexWrap:'wrap'}} >

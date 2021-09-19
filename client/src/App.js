@@ -10,6 +10,9 @@ import EditNote from "./components/pages/EditNote";
 // import NotFound from "./components/pages/NotFound";
 import Profile from "./components/pages/Profile";
 import ProfileUpdate from "./components/pages/ProfileUpdate";
+import ForgotPass from "./components/pages/ForgotPass";
+import ResetPass from "./components/pages/ResetPass";
+import Activate from "./components/pages/Activate";
 
 
 function App() {
@@ -25,6 +28,9 @@ function App() {
           <Route path="/createnote" component={CreateNote} />
           <Route path="/note/:id" component={EditNote} />
           <Route path="/authenticate" component={Authentic} />
+          <Route path="/activate/:id" component={Activate} />
+          <Route path="/forgot-password" component={ForgotPass} />
+          <Route path="/resetPassword/:id" component={ResetPass} />
           {/* <Route path="/notfound" component={NotFound} /> */}
           <Route path="/profile" component={Profile} />
           <Route path="/profileupdate" component={ProfileUpdate} />

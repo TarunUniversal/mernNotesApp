@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const notes = require('./data/data');
 const app = express();
 const connectDB = require('./config/db');
@@ -19,6 +20,8 @@ app.use(express.json());
 //     res.send(note);
 //     // console.log(req.params);
 // })
+
+
 
 app.use('/api/users', userRoutes);
 app.use('/api/notes', noteRoutes);

@@ -1,4 +1,7 @@
 import {
+    USER_ACTIVATE_REQUEST,
+    USER_ACTIVATE_SUCCESS,
+    USER_ACTIVATE_FAIL,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
@@ -9,8 +12,16 @@ import {
     USER_UPDATE_FAIL,
     USER_UPDATE_REQUEST,
     USER_UPDATE_SUCCESS,
+    FORGOT_PASSWORD_REQUEST,
+    RESET_PASSWORD_REQUEST,
+    FORGOT_PASSWORD_FAIL,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_FAIL,
+    FORGOT_PASSWORD_SUCCESS,
   } from "../constants/user";
   import axios from "axios";
+import { Redirect } from "react-router";
+
   
   export const login = (email, password) => async (dispatch) => {
     try {
@@ -62,12 +73,9 @@ import {
         { name, pic, email, password },
         config
       );
-  
-      dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
-  
-      dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
-  
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      dispatch({ type: USER_REGISTER_SUCCESS, payload:data.message })
+      // dispatch({ type: USER_ACTIVATE_REQUEST });
+      
     } catch (error) {
       dispatch({
         type: USER_REGISTER_FAIL,
@@ -78,6 +86,34 @@ import {
       });
     }
   };
+
+  export const activateUser = (token) => async (dispatch) => {
+    try{
+      dispatch({ type: USER_ACTIVATE_REQUEST });
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(`/api/users/activate/${token}`, config);
+
+      dispatch({ type: USER_ACTIVATE_SUCCESS, payload:data });
+      // dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
+      dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+
+    } catch(error) {
+      dispatch({
+        type: USER_ACTIVATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  }
   
   export const updateProfile = (user) => async (dispatch, getState) => {
     try {
@@ -111,3 +147,50 @@ import {
       });
     }
   };
+
+
+export const forgotPass = (email) => async(dispatch) => {
+  try{
+    dispatch({ type: FORGOT_PASSWORD_REQUEST });
+
+    const config = {
+      headers: {
+        "content-Type": "application/json",
+      },
+    }
+
+    const {data} = await axios.post("/api/users/forgot-password", {email}, config)
+                    
+    console.log(data);
+    dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data.message })
+    // dispatch({ type: RESET_PASSWORD_REQUEST });
+  } catch(error){
+      dispatch({ type: FORGOT_PASSWORD_FAIL,
+                 payload: error.response && error.response.data.message
+                 ? error.response.data.message
+                 : error.message,
+      });
+  }
+}
+
+export const resetPass = (token, newPassword, confirmPassword) => async(dispatch) => {
+  dispatch({ type: RESET_PASSWORD_REQUEST });
+  try{
+    const config = {
+      headers: {
+        "content-Type": "application/json",
+      },
+    }
+
+    const {data} = await axios.put(`/api/users/reset-password/${token}`,{newPassword, confirmPassword}, config);
+    console.log(data);
+    dispatch({ type: RESET_PASSWORD_SUCCESS, payload: data.message});
+    <Redirect to="/authenticate" />
+  } catch(error){
+    dispatch({ type: RESET_PASSWORD_FAIL,
+              payload: error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+    });
+  }
+}

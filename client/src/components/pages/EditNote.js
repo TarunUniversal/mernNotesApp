@@ -34,7 +34,7 @@ const EditNote = ({match}) => {
 
     useEffect(() => {
         fetching();
-    }, []);
+    });
     
     const submitHandler = (e) => {
         e.preventDefault();
@@ -49,7 +49,7 @@ const EditNote = ({match}) => {
         <>
             <h1 className='heading' >Edit Note</h1>
             {loading && <Loading/>}
-            {error && <ErrorMessage>{error}</ErrorMessage>}
+            {error && <ErrorMessage variant="danger" >{error}</ErrorMessage>}
             <div style={{margin:'10px 12% 0px 12%'}} >
             <Form onSubmit={submitHandler} >
             <Form.Group className="mb-3" controlId="formBasicText">

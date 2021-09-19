@@ -50,6 +50,8 @@ const LoginForm = () => {
                 Login
             </Button>
             </div>
+
+            <a href="/forgot-password" style={{textDecoration:'none'}} >forgot password</a>
             </Form>
         </div>
     )

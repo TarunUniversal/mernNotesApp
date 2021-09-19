@@ -119,7 +119,7 @@ try {
 }
 };
 
-export const deleteNoteAction = (id) => async (dispatch, getState) => {
+export const deleteNoteAction = (id, res) => async (dispatch, getState) => {
   try {
     dispatch({
       type: NOTES_DELETE_REQUEST,

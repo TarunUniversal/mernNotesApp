@@ -13,13 +13,17 @@ const RegisterForm = () => {
     const [password, setPassword] = useState("")
     const [confirmpassword, setConfirmPassword] = useState("")
     const [pic, setPic] = useState("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg")
-    const [message, setMessage] = useState(null);
+    const [passErr, setPassErr] = useState("");
+
     const [picMessage, setPicMessage] = useState(null);
 
     const dispatch = useDispatch();
 
     const userRegister = useSelector((state) => state.userRegistration);
-    const { loading, error, userInfo } = userRegister;
+    const { loading, error, message } = userRegister;
+
+    const userActivate = useSelector(state => state.userActivate);
+    const {userInfo} = userActivate
 
     const postDetails = (pics) => {
         if (
@@ -60,24 +64,31 @@ const RegisterForm = () => {
     const submitHandler = async (e) => {
         e.preventDefault();
 
-        if (password !== confirmpassword) {
-        setMessage("Passwords do not match");
-        } else dispatch(register(name, email, password, pic));
+        if(name === "" || email === "" || password === "" || confirmpassword === ""){
+          setPassErr("Please fill desired fields.");
+        }
+        else if (password !== confirmpassword) {
+          setPassErr("Passwords does not match.");
+        }
+        else{
+          dispatch(register(name, email, password, pic));
+        }
     };
 
     return (
         <div style={{marginBottom:'2rem'}} >
             {error && <ErrorMessage variant="danger" >{error}</ErrorMessage>}
-            {message && <ErrorMessage variant="danger">{message}</ErrorMessage>}
+            {passErr && <ErrorMessage variant="danger" >{passErr}</ErrorMessage>}
+            {message && <ErrorMessage variant="success">{message}</ErrorMessage>}
             {picMessage && (<ErrorMessage variant="danger">{picMessage}</ErrorMessage>)}
             {loading && <Loading/>}
             <Form onSubmit={submitHandler} >
             <Form.Group className="mb-3" >
-                <Form.Label>Name</Form.Label>
+                <Form.Label>Name <spam style={{color:'red'}} >*</spam> </Form.Label>
                 <Form.Control id="name" type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
             </Form.Group>
             <Form.Group className="mb-3" >
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>Email address <spam style={{color:'red'}} >*</spam> </Form.Label>
                 <Form.Control id="email" type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <Form.Text className="text-muted">
                 We'll never share your email with anyone else.
@@ -85,11 +96,11 @@ const RegisterForm = () => {
             </Form.Group>
 
             <Form.Group className="mb-3" >
-                <Form.Label>Password</Form.Label>
+                <Form.Label>Password <spam style={{color:'red'}} >*</spam> </Form.Label>
                 <Form.Control id="password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </Form.Group>
             <Form.Group className="mb-3" >
-                <Form.Label>Confirm Password</Form.Label>
+                <Form.Label>Confirm Password <spam style={{color:'red'}} >*</spam> </Form.Label>
                 <Form.Control id="confirm-password" type="password" placeholder="Confirm Password" value={confirmpassword} onChange={(e) => setConfirmPassword(e.target.value)} />
             </Form.Group>
             <Form.Group className="form-group mb-3" >
