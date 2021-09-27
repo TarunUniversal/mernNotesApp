@@ -37,11 +37,11 @@ function ForgotPass() {
     return (
         <>
         <h1 className='heading' >Forgot Password</h1>
+        <div style={{margin:'10px 12% 0px 12%'}} >
         {message && <ErrorMessage variant="success" >{message}</ErrorMessage>}
         {error && <ErrorMessage variant="danger" >{error}</ErrorMessage>}
         {errMsg && <ErrorMessage variant="danger" >{errMsg}</ErrorMessage>}
         {loading && <Loading/>}
-        <div style={{margin:'10px 12% 0px 12%'}} >
             <Form onSubmit={submitHandler} >
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
@@ -53,7 +53,7 @@ function ForgotPass() {
                 Submit
             </Button>
             &emsp;
-            <Button variant="danger" href="/authenticate">
+            <Button variant="danger" href="/authenticate/login">
                 Cancel
             </Button>
             </div>

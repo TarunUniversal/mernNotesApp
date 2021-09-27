@@ -82,6 +82,8 @@ const RegisterForm = () => {
             {message && <ErrorMessage variant="success">{message}</ErrorMessage>}
             {picMessage && (<ErrorMessage variant="danger">{picMessage}</ErrorMessage>)}
             {loading && <Loading/>}
+
+
             <Form onSubmit={submitHandler} >
             <Form.Group className="mb-3" >
                 <Form.Label>Name <spam style={{color:'red'}} >*</spam> </Form.Label>

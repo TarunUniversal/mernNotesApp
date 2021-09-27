@@ -5,6 +5,7 @@ const User = require('../models/user');
 const generateToken = require('../utils/generateToken');
 const _ = require('lodash');
 const jwt = require("jsonwebtoken");
+const { OAuth2Client } = require('google-auth-library');
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SEND_GRID)
 
@@ -752,7 +753,63 @@ const resetPassword = asyncHandler(async (req, res) => {
 
 });
 
-module.exports = { registerUser, activateUser, authUser, updateuserProfile, forgotPassword, resetPassword };
+
+//Google Login
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT);
+const googleController = (req,res) => {
+  const { idToken } = req.body;
+  // console.log(idToken);
+
+  client
+    .verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT })
+    .then(response => {
+      // console.log('GOOGLE LOGIN RESPONSE',response)
+      const { email_verified, name, email, picture } = response.payload;
+      if (email_verified) {
+        User.findOne({ email }).exec((err, user) => {
+          if (user) {
+            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+              expiresIn: '7d'
+            });
+            return res.status(201).json({
+              _id : user._id,
+              name : user.name,
+              email:user.email,
+              isAdmin:user.isAdmin,
+              pic:user.pic,
+              token:generateToken(user._id)
+            })
+          } else {
+            let password = email + process.env.JWT_SECRET;
+            let pic = picture
+            user = new User({ name, email, password, pic });
+            user.save((err, data) => {
+              if (err) {
+                console.log('ERROR GOOGLE LOGIN ON USER SAVE', err);
+                return res.status(400).json({
+                  error: 'User signup failed with google'
+                });
+              }
+              return res.status(201).json({
+                _id : user._id,
+                name : user.name,
+                email:user.email,
+                isAdmin:user.isAdmin,
+                pic:user.pic,
+                token:generateToken(user._id)
+              })
+            });
+          }
+        });
+      } else {
+        return res.status(400).json({
+          error: 'Google login failed. Try again'
+        });
+      }
+    });
+};
+
+module.exports = { registerUser, activateUser, authUser, updateuserProfile, forgotPassword, resetPassword, googleController };
 
 
 

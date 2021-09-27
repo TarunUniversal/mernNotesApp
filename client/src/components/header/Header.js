@@ -31,7 +31,7 @@ const Header = ({ setSearch }) => {
 
     return (
         <div>
-            <Navbar bg="light" expand="lg" fixed="top">
+            <Navbar bg="link" expand="lg" fixed="top" style={{backgroundColor:'#FFFFFF'}}>
             <Container>
                 <Navbar.Brand> <img src={notas} alt="notas" style={{height:'25px', width:'auto'}} /> </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -63,11 +63,11 @@ const Header = ({ setSearch }) => {
                         {/* <button type="button" class="btn btn-primary"><AccountCircleRoundedIcon/></button> */}
                         <img src={userInfo.pic} alt={userInfo.name} className="avatar" style={{ }} onClick={profile} />
                         {/* <Button href="/profile" className="btn btn-dark my-2 my-sm-0 searchBtn" type="submit"><AccountCircleRoundedIcon/></Button> */}
-                        <Button className="btn btn-dark my-2 my-sm-0 searchBtn" type="submit" onClick={logoutHandler} ><ExitToAppIcon/></Button>
+                        <Button  type="submit" onClick={logoutHandler} style={{boxShadow:'none', backgroundColor:'transparent'}} ><ExitToAppIcon/></Button>
                     </>
                 ):(
                     <>
-                        <Nav.Link > <Link className="link" to="/authenticate" > Login </Link></Nav.Link>
+                        <Nav.Link > <Link className="link" to="/authenticate/login" > Login </Link></Nav.Link>
                     </>
                 )}
                 </Navbar.Collapse>

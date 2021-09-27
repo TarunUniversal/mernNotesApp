@@ -60,13 +60,13 @@ const CreateNote = () => {
                 <Form.Control type="text" placeholder="Learning" value={category} onChange={(e) => setCategory(e.target.value)} />
             </Form.Group>
             <div style={{textAlign:'center'}}>
-            <Button variant="primary" type="submit">
+            <button className="btn btn-success" variant="primary" type="submit">
                 Create
-            </Button>
+            </button>
             &emsp;
-            <Button variant="primary" type="submit" onClick={resetHandler} >
+            <button className="btn btn-danger" variant="primary" type="submit" onClick={resetHandler} >
                 Reset
-            </Button>
+            </button>
             </div>
             </Form>
             </div>

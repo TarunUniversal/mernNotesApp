@@ -4,6 +4,7 @@ import "./Pages.css";
 import { Accordion, Button, Card, Modal } from "react-bootstrap";
 import EditRoundedIcon from "@material-ui/icons/EditRounded";
 import DeleteRoundedIcon from "@material-ui/icons/DeleteRounded";
+import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded';
 import { deleteNoteAction, listNotes } from "../../actions/notes";
 import Loading from "./Loading";
 import { useHistory } from "react-router-dom";
@@ -16,6 +17,10 @@ import NotFound from "./NotFound";
 
 const MyNotes = ({ search }) => {
   const history = useHistory();
+
+  const [rotate, setRotate] = useState(false);
+  const handleRotate = () => setRotate(!rotate);
+  const rotateIcon = rotate ? "rotate(180deg)" : "rotate(0)";
 
   const dispatch = useDispatch();
   const noteList = useSelector((state) => state.noteList);
@@ -89,14 +94,16 @@ const MyNotes = ({ search }) => {
                   <Card className="mynotes" style={{ margin: "10px 55px" }}>
                     <Card.Header as="h5" style={{ float: "right" }}>
                       {" "}
-                      <Accordion.Toggle eventKey="0" as={Card.Text}>
+                      <Accordion.Toggle eventKey="0" as={Card.Text} onClick={handleRotate}>
                         {note.title}
+                        <div style={{ float: "right" }}>
                         <spam
-                          style={{ float: "right" }}
-                          className="badge badgeCustom bg-success"
+                          className="badge badgeCustom bg-light"
                         >
                           {note.category}
                         </spam>
+                        <ExpandMoreRoundedIcon style={{ transform: rotateIcon, transition: "all 0.2s linear"}} />
+                        </div>
                       </Accordion.Toggle>{" "}
                     </Card.Header>
                     <Accordion.Collapse eventKey="0">
@@ -110,20 +117,21 @@ const MyNotes = ({ search }) => {
                           {/* <FormControlLabel
                                     control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" style={{textAlign:'center', fontSize:'40px', marginRight:'0px'}} />}
                                 /> */}
-                          <Button
-                            variant="primary center ta-r"
-                            className="btn btn-outline-warning"
-                            href={`/note/${note._id}`}
+                          <button
+                            type="button"
+                            className="btn btn-outline-light"
+                            // href={`/note/${note._id}`}
+                            onClick={() => history.push(`/note/${note._id}`)}
                           >
                             <EditRoundedIcon />
-                          </Button>
-                          <Button
+                          </button>
+                          <button
                             variant="primary center ta-r"
-                            className="btn btn-outline-danger ms-2"
+                            className="btn btn-danger  ms-2"
                             onClick={() => handlemodal(note)}
                           >
                             <DeleteRoundedIcon />
-                          </Button>
+                          </button>
                         </div>
                       </Card.Body>
                     </Accordion.Collapse>
